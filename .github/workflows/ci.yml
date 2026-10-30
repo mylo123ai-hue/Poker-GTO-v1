@@ -1,0 +1,48 @@
+name: Validate Poker GTO Lab
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Run seeded 1,000-hand simulation
+        run: npm run simulate -- --hands 1000 --seed 20261030 --p0 balanced --p1 aggressive --out artifacts/simulation
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: poker-gto-simulation-report
+          path: artifacts/simulation/
+          if-no-files-found: warn
+
+  browser-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: poker-gto-browser-report
+          path: playwright-report/
+          if-no-files-found: ignore
