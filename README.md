@@ -43,7 +43,7 @@ Simulation outputs are evidence about the selected heuristic profiles only. They
 
 - `src/poker/` — seeded deck, hand evaluation, heads-up rules, legal sizing, all-ins, showdown settlement and profile-driven opponents.
 - `src/coach/` — concise rule-based recommendation; it receives only a privacy-limited `PlayerView`.
-- `src/solver/` and `public/solver-manifest.json` — rules abstraction and fail-closed solver lookup. Current coverage is zero.
+- `src/solver/` and `public/solver-manifest.json` — one exact river-demo dataset and a fail-closed lookup for every other spot.
 - `src/simulation/` — headless engine runner, deterministic regression projection, worker entry point and JSON/CSV/PDF exports.
 - `src/ui/` — table, action controls, live coach, metrics and simulation controls.
 - `e2e/` and `src/**/*.test.ts` — rule, accuracy-boundary, repeatability, export, privacy and browser smoke checks.
@@ -53,7 +53,7 @@ Chips use integer half-big-blind units: blinds are 1/2 chips and the default 200
 
 ## Solver provenance and metrics
 
-`VERIFIED SOLVER` is reserved for licensed, compatible strategy outputs with validated spot fixtures and parameter metadata. No rows currently meet that bar. `APPROXIMATE` labels the authored coach, profile behavior, and deterministic Monte Carlo equity estimate against a uniformly random legal hand. `UNAVAILABLE` marks solver frequencies and solver EV. Pot odds are exact arithmetic for the current call price and exclude future betting.
+One pinned solver dataset covers one OOP river decision for A♠4♠ on a specified board, ranges, pot, stack, and betting tree. The separate demo shows that combo's action mix and the root range-average EV; it is not connected to live hands or heuristic simulations. All other live spots remain `UNAVAILABLE` or `UNSUPPORTED`. `APPROXIMATE` labels the authored coach, profile behavior, and deterministic Monte Carlo equity estimate against a uniformly random legal hand. Pot odds are exact arithmetic for the current call price and exclude future betting. See [solver provenance and coverage](docs/solver-provenance.md) for the pinned solver source, local compatibility patch, data checksums, assumptions, and reproduction steps.
 
 ## Rollback
 

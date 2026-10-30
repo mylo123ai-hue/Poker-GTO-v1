@@ -1,7 +1,6 @@
 import { chooseAIActionForHand } from "../poker/ai";
 import { applyAction, createHand, DEFAULT_STACK, BIG_BLIND, playerView } from "../poker/engine";
 import type { OpponentProfile, PlayerId, PokerAction } from "../poker/types";
-import { VERIFIED_SOLVER_SPOT_COUNT } from "../solver/adapter";
 
 export type SimulationOptions = {
   hands: number;
@@ -25,7 +24,7 @@ export type SimulationResult = {
   chipResults: { p0Net: number; p1Net: number; totalNet: number; averagePot: number };
   actionCounts: Record<PlayerId, Record<PokerAction["type"], number>>;
   actionFrequency: Record<PlayerId, Record<PokerAction["type"], number>>;
-    solverCoverage: { verifiedSpots: number; eligibleDecisions: number; coveragePercent: number };
+  solverCoverage: { verifiedSpots: number; eligibleDecisions: number; coveragePercent: number };
   solverAgreement: null;
   solverExpectedValueLoss: null;
   codeSha: string;
@@ -100,7 +99,9 @@ export function runSimulation(options: SimulationOptions): SimulationResult {
     }
   }
   const eligibleDecisions = ACTIONS.reduce((sum, action) => sum + actionCounts.p0[action] + actionCounts.p1[action], 0);
-  const coveragePercent = eligibleDecisions === 0 ? 0 : (VERIFIED_SOLVER_SPOT_COUNT / eligibleDecisions) * 100;
+  // This batch runs the authored heuristic profiles. The separate static solver demo
+  // does not match or evaluate any decisions in this simulation.
+  const coveragePercent = 0;
   return {
     schemaVersion: 1,
     seed: String(options.seed),
@@ -118,7 +119,7 @@ export function runSimulation(options: SimulationOptions): SimulationResult {
     },
     actionCounts,
     actionFrequency,
-    solverCoverage: { verifiedSpots: VERIFIED_SOLVER_SPOT_COUNT, eligibleDecisions, coveragePercent },
+    solverCoverage: { verifiedSpots: 0, eligibleDecisions, coveragePercent },
     solverAgreement: null,
     solverExpectedValueLoss: null,
     codeSha: options.codeSha ?? "UNSPECIFIED",

@@ -8,7 +8,13 @@ test("trainer renders a playable hand and hides the opponent cards", async ({ pa
   await expect(page.getByRole("heading", { name: "Action history" })).toBeVisible();
   await expect(page.getByLabel("Opponent cards hidden")).toBeVisible();
   await expect(page.getByLabel("Undealt community card")).toHaveCount(5);
-  await expect(page.getByText("0 verified spots")).toBeVisible();
+  await expect(page.getByText("1 verified demo spot")).toBeVisible();
+  const solverDemo = page.getByRole("region", { name: "Verified solver demo" });
+  await expect(solverDemo).toBeVisible();
+  await expect(solverDemo.getByRole("heading", { name: "Solver-backed river demo" })).toBeVisible();
+  await expect(solverDemo.getByRole("list").getByText("Check", { exact: true })).toBeVisible();
+  await expect(solverDemo.getByText("Bet 10 chips", { exact: true })).toBeVisible();
+  await expect(solverDemo.getByText("Root range-average EV · OOP")).toBeVisible();
   const actionButton = page.getByRole("button", { name: /^(Call|Check)/ }).first();
   await actionButton.click();
   await expect(page.getByText("1 actions")).toBeVisible({ timeout: 5_000 });
