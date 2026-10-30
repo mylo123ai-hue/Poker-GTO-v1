@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { applyMatchAction, createMatch, startNextHand, toCompletedHandRecord } from "./match";
 import { availableActions } from "./engine";
-import { applyTrainerAction, createDefaultTrainerData, loadTrainerData, saveTrainerData, TRAINER_STORAGE_KEY } from "./persistence";
+import { applyTrainerAction, createDefaultTrainerData, loadTrainerData, saveTrainerData, startTrainerMatch, TRAINER_STORAGE_KEY } from "./persistence";
 import { calculatePlayerStats, findLeakIndicators } from "./stats";
 
 class MemoryStorage {
@@ -29,6 +29,22 @@ describe("trainer persistence and sample-correct metrics", () => {
     const recovered = loadTrainerData(storage);
     expect(recovered.recovered).toBe(true);
     expect(recovered.data.match.hand.street).toBe("preflop");
+  });
+
+  it("starts a fresh match while retaining completed hand history", () => {
+    let trainer = createDefaultTrainerData();
+    trainer = applyTrainerAction(trainer, { type: "fold" });
+    expect(trainer.history).toHaveLength(1);
+    const settings = { startingStackChips: 80, smallBlindChips: 1, bigBlindChips: 2 };
+    const reset = startTrainerMatch(trainer, settings, "reset-seed");
+
+    expect(reset.matchesStarted).toBe(2);
+    expect(reset.match.handNumber).toBe(1);
+    expect(reset.match.status).toBe("active");
+    expect(reset.match.seedRoot).toBe("reset-seed");
+    expect(reset.match.hand.currentActor).toBe("p0");
+    expect(reset.match.hand.players.map((player) => player.stack)).toEqual([79, 78]);
+    expect(reset.history).toEqual(trainer.history);
   });
 
   it("uses action-based denominators for VPIP, PFR, 3-bet, c-bet, and folds to c-bets", () => {

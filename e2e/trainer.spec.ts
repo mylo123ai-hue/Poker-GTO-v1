@@ -55,6 +55,10 @@ test("match setup applies custom blinds and elimination ends a short-stack match
   await expect(page.getByText("Match complete", { exact: true })).toBeVisible({ timeout: 5_000 });
   await expect(page.getByRole("button", { name: "Start a new match" })).toBeVisible();
   await expect(page.getByText("completed matches saved")).toBeVisible();
+  await page.getByRole("button", { name: "Start a new match" }).click();
+  await expect(page.locator(".table-toolbar")).toContainText("MATCH 03 · HAND 001");
+  await expect(page.locator(".hand-stats")).toContainText("HANDS PLAYED 0");
+  await expect(page.getByRole("button", { name: /^Call 1/ })).toBeVisible();
 });
 
 test("refresh resumes the saved hand and malformed storage recovers", async ({ page }) => {
