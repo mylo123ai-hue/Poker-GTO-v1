@@ -1,0 +1,486 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 3219
+>>
+stream
+0.200025 w
+0 G
+BT
+/F2 22 Tf
+25.2999999999999972 TL
+0 g
+48. 740. Td
+(Heads-up simulation report) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 720. Td
+(Seed 20261030  |  1000/1000 hands  |  runtime 994.0 ms) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 704. Td
+(Profiles: balanced vs aggressive  |  starting stack 200 chips  |  blinds 1/2) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 688. Td
+(Code SHA: bf8c52fbab937cf738c666f1a8b7d53c73b759a7) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 672. Td
+(Solver data SHA: none — no verified solver dataset loaded) Tj
+ET
+BT
+/F2 13 Tf
+14.9499999999999993 TL
+0 g
+48. 634. Td
+(Outcomes) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 603. Td
+(P0 wins  465) Tj
+ET
+0.1 0.46 0.35 rg
+160. 614. 356.8163265306122298 -15. re
+f
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 577. Td
+(P1 wins  490) Tj
+ET
+0.76 0.46 0.37 rg
+160. 588. 376. -15. re
+f
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 551. Td
+(Ties  45) Tj
+ET
+0.52 0.58 0.35 rg
+160. 562. 34.5306122448979593 -15. re
+f
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 526. Td
+(Showdowns 958  |  folds 42  |  average pot 17.56 chips) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 510. Td
+(Failed hands: 0) Tj
+ET
+BT
+/F2 13 Tf
+14.9499999999999993 TL
+0 g
+48. 486. Td
+(Empirical action counts) Tj
+ET
+BT
+/F2 10 Tf
+11.5 TL
+0 g
+48. 462. Td
+(P0 — balanced) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 443. Td
+(fold: 42 \(0.9%\)) Tj
+ET
+0.36 0.71 0.56 rg
+48. 434. 1.0172684458398744 -9. re
+f
+0.82 G
+48. 434. 108. -9. re
+S
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+174. 443. Td
+(check: 2745 \(61.6%\)) Tj
+ET
+0.36 0.71 0.56 rg
+174. 434. 66.4857591388203559 -9. re
+f
+0.82 G
+174. 434. 108. -9. re
+S
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+300. 443. Td
+(call: 1506 \(33.8%\)) Tj
+ET
+0.36 0.71 0.56 rg
+300. 434. 36.4763399865440689 -9. re
+f
+0.82 G
+300. 434. 108. -9. re
+S
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+426. 443. Td
+(raise: 166 \(3.7%\)) Tj
+ET
+0.36 0.71 0.56 rg
+426. 434. 4.020632428795694 -9. re
+f
+0.82 G
+426. 434. 108. -9. re
+S
+BT
+/F2 10 Tf
+11.5 TL
+0 g
+48. 375. Td
+(P1 — aggressive) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 356. Td
+(fold: 0 \(0.0%\)) Tj
+ET
+0.36 0.71 0.56 rg
+48. 347. 0. -9. re
+f
+0.82 G
+48. 347. 108. -9. re
+S
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+174. 356. Td
+(check: 2397 \(60.1%\)) Tj
+ET
+0.36 0.71 0.56 rg
+174. 347. 64.8649461287897822 -9. re
+f
+0.82 G
+174. 347. 108. -9. re
+S
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+300. 356. Td
+(call: 529 \(13.3%\)) Tj
+ET
+0.36 0.71 0.56 rg
+300. 347. 14.315209220746679 -9. re
+f
+0.82 G
+300. 347. 108. -9. re
+S
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+426. 356. Td
+(raise: 1065 \(26.7%\)) Tj
+ET
+0.36 0.71 0.56 rg
+426. 347. 28.8198446504635406 -9. re
+f
+0.82 G
+426. 347. 108. -9. re
+S
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+48. 264. Td
+(Solver coverage and limits) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 242. Td
+(Verified solver spots: 0; eligible decisions: 8450; coverage 0.00%.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 226. Td
+(Agreement and solver EV loss were not computed because no verified solver reference exists.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 210. Td
+(Action frequencies describe these heuristic opponents only; they are not GTO frequencies.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+48. 194. Td
+(Net chips: P0 278; P1 -278; total 0. Results depend on this seed, stack, and profiles.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.392 g
+48. 54. Td
+(Poker GTO Lab • play-money simulation • no GTO accuracy claim) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R ]
+/Count 1
+>>
+endobj
+5 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+6 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+7 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+8 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+9 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+10 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+/F3 7 0 R
+/F4 8 0 R
+/F5 9 0 R
+/F6 10 0 R
+/F7 11 0 R
+/F8 12 0 R
+/F9 13 0 R
+/F10 14 0 R
+/F11 15 0 R
+/F12 16 0 R
+/F13 17 0 R
+/F14 18 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+19 0 obj
+<<
+/Producer (jsPDF 3.0.4)
+/CreationDate (D:20261030005203-00'00')
+>>
+endobj
+20 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 21
+0000000000 65535 f 
+0000003391 00000 n 
+0000005208 00000 n 
+0000000015 00000 n 
+0000000120 00000 n 
+0000003448 00000 n 
+0000003573 00000 n 
+0000003703 00000 n 
+0000003836 00000 n 
+0000003973 00000 n 
+0000004096 00000 n 
+0000004225 00000 n 
+0000004357 00000 n 
+0000004493 00000 n 
+0000004621 00000 n 
+0000004748 00000 n 
+0000004877 00000 n 
+0000005010 00000 n 
+0000005112 00000 n 
+0000005456 00000 n 
+0000005542 00000 n 
+trailer
+<<
+/Size 21
+/Root 20 0 R
+/Info 19 0 R
+/ID [ <2B9B98019794375217EFB5DA10372049> <2B9B98019794375217EFB5DA10372049> ]
+>>
+startxref
+5646
+%%EOF
