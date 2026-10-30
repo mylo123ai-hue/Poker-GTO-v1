@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "manifestId": "poker-gto-trainer-empty-solver-coverage-v1",
+  "verifiedDatasets": [],
+  "coverage": {
+    "verifiedSpotCount": 0,
+    "stackDepthsBb": [],
+    "rakePercentages": [],
+    "streets": [],
+    "bettingTrees": [],
+    "actionFrequenciesAvailable": false,
+    "expectedValuesAvailable": false
+  },
+  "status": "No licensed, compatible solver output is currently shipped. The runtime adapter returns UNAVAILABLE for spots in the documented rules abstraction and UNSUPPORTED for spots outside it."
+}

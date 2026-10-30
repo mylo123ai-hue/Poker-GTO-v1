@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "seed": "20261030",
+  "handsRequested": 1000,
+  "handsCompleted": 1000,
+  "profiles": {
+    "p0": "balanced",
+    "p1": "aggressive"
+  },
+  "startingStackChips": 200,
+  "blinds": {
+    "small": 1,
+    "big": 2
+  },
+  "outcomes": {
+    "p0Wins": 465,
+    "p1Wins": 490,
+    "ties": 45,
+    "showdowns": 958,
+    "folds": 42
+  },
+  "chipResults": {
+    "p0Net": 278,
+    "p1Net": -278,
+    "totalNet": 0,
+    "averagePot": 17.563
+  },
+  "actionCounts": {
+    "p0": {
+      "fold": 42,
+      "check": 2745,
+      "call": 1506,
+      "raise": 166
+    },
+    "p1": {
+      "fold": 0,
+      "check": 2397,
+      "call": 529,
+      "raise": 1065
+    }
+  },
+  "actionFrequency": {
+    "p0": {
+      "fold": 0.009419152276295133,
+      "check": 0.6156088809150033,
+      "call": 0.33774388876429695,
+      "raise": 0.037228078044404575
+    },
+    "p1": {
+      "fold": 0,
+      "check": 0.6006013530443498,
+      "call": 0.1325482335254322,
+      "raise": 0.266850413430218
+    }
+  },
+  "solverCoverage": {
+    "verifiedSpots": 0,
+    "eligibleDecisions": 8450,
+    "coveragePercent": 0
+  },
+  "solverAgreement": null,
+  "solverExpectedValueLoss": null,
+  "codeSha": "bf8c52fbab937cf738c666f1a8b7d53c73b759a7",
+  "solverDataSha": null,
+  "runtimeMs": 994.032019,
+  "failures": []
+}
