@@ -50,6 +50,12 @@ The static demo recommends **Check** as the highest-frequency action and display
 
 After 1,700 DCFR iterations, the solver measured exploitability at `0.00097221136 chips`, or `0.009722114%` of the starting pot. This reached the configured `0.01% of pot` reporting threshold. This is one finite solver profile and a measured profile metric. It is not a claim of exact equilibrium, full-game GTO, postflop coverage beyond this root decision, or accuracy against real opponents.
 
+## Independent numerical validation
+
+[`scripts/validateRiverSolution.ts`](../scripts/validateRiverSolution.ts) independently expands the pinned ranges, evaluates seven-card hands, enumerates the 132 compatible combo pairs and recomputes profile EV, per-combo EV, both best responses, deviation gains and exploitability for the five-node betting tree. It does not call the Rust solver or its evaluator. The sanitized pinned raw-output snapshot [`codex/solver-fixtures/river-k72-oop-a4s-v1-validation.json`](../codex/solver-fixtures/river-k72-oop-a4s-v1-validation.json) omits only measured `wall_seconds`; SHA-256 `01ced9dc2a4faf39795ff1340758ac4506e3ea1481d036c894d64f06cd0e7890`.
+
+The independent double-precision calculation differs from the solver's `f32` values by less than `5e-7` chips for EV, gains and exploitability. The validator allows `1e-5` chips and `1e-5` percentage points, and strategy normalization uses `1e-5`; these limits exceed the observed rounding differences while remaining small relative to a chip and the configured `0.01%`-of-pot target. The selected A♠4♠ combo EV independently evaluates to `−5.00021638` chips, distinct from the `−0.9090907` full-range EV shown in the demo. This is a separate implementation check, not a proof of mathematical independence or a second equilibrium solver.
+
 The canonical export intentionally excludes the CLI's measured `wall_seconds`; therefore two solves with the same pinned source, patch, config, toolchain and thread count produce byte-identical packaged data. The 2,185-byte JSON file [`src/solver/data/river-k72-oop-a4s-v1.json`](../src/solver/data/river-k72-oop-a4s-v1.json) has SHA-256 `d33b3bf6eeeeeecaf2c4e59ea72cdb7d7307327b4b54eb1a99a59bdf8d62078b`. The public manifest records this digest and the source config digest.
 
 ## Reproduction

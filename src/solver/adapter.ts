@@ -126,11 +126,19 @@ function unsupported(reason: string): SolverLookup {
 }
 
 function arraysEqual(left: readonly string[] | undefined, right: readonly string[]): boolean {
-  return Boolean(left && left.length === right.length && left.every((value, index) => value === right[index]));
+  if (!left || left.length !== right.length) return false;
+  for (let index = 0; index < right.length; index += 1) {
+    if (!Object.prototype.hasOwnProperty.call(left, index) || left[index] !== right[index]) return false;
+  }
+  return true;
 }
 
 function numbersEqual(left: readonly number[] | undefined, right: readonly number[]): boolean {
-  return Boolean(left && left.length === right.length && left.every((value, index) => value === right[index]));
+  if (!left || left.length !== right.length) return false;
+  for (let index = 0; index < right.length; index += 1) {
+    if (!Object.prototype.hasOwnProperty.call(left, index) || left[index] !== right[index]) return false;
+  }
+  return true;
 }
 
 function hasExactScenario(spot: SolverSpotInput): boolean {

@@ -4,6 +4,10 @@ test("trainer renders a playable hand and hides the opponent cards", async ({ pa
   await page.goto("/");
   await expect(page.getByRole("heading", { name: /every decision/i })).toBeVisible();
   await expect(page.getByRole("region", { name: "Poker table and coach" })).toBeVisible();
+  const coach = page.getByRole("complementary", { name: "Coach and metrics" });
+  await expect(coach.locator(".approx-badge")).toHaveText("APPROXIMATE");
+  await expect(coach.getByText("NOT SOLVER VERIFIED")).toBeVisible();
+  await expect(coach.getByText(/Live hand lookup: The verified solver dataset covers a river decision only/)).toBeVisible();
   await expect(page.getByRole("combobox", { name: "OPPONENT" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Action history" })).toBeVisible();
   await expect(page.getByLabel("Opponent cards hidden")).toBeVisible();
@@ -26,6 +30,7 @@ test("simulation lab starts a seeded worker batch", async ({ page }) => {
   await page.getByLabel("SEED").last().fill("e2e-seed");
   await page.getByRole("button", { name: "Run batch" }).click();
   await expect(page.getByText("100 hands", { exact: false })).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByText(/separate river demo is not used by these simulations/)).toBeVisible();
   const pdfButton = page.getByRole("button", { name: "PDF report" });
   await expect(pdfButton).toBeVisible();
   const [report] = await Promise.all([page.waitForEvent("download"), pdfButton.click()]);
