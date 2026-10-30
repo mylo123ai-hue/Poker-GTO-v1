@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "simulate": "tsx scripts/simulate.ts",
+    "solver:export": "tsx scripts/exportSolverData.ts",
     "simulate:sample": "tsx scripts/simulate.ts --hands 1000 --seed 20261030 --out reports/sample"
   },
   "dependencies": {

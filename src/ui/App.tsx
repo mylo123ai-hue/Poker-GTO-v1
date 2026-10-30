@@ -15,6 +15,7 @@ import { estimateEquity } from "../poker/equity";
 import { createSimulationPdf, simulationToCsv, simulationToJson } from "../simulation/simulationReport";
 import type { SimulationResult } from "../simulation/simulate";
 import { lookupSolverSpot, VERIFIED_SOLVER_SPOT_COUNT } from "../solver/adapter";
+import { SolverDemo } from "./SolverDemo";
 import type { Card, HandState, OpponentProfile, PokerAction, PlayerId } from "../poker/types";
 
 const DEFAULT_SEED = 20261030;
@@ -85,10 +86,9 @@ export function App() {
   ), [hand]);
   const solverLookup = useMemo(() => lookupSolverSpot({
     players: 2,
-    effectiveStackBb: 100,
+    effectiveStackChips: STARTING_STACK,
     rakePercent: 0,
     street: hand.street === "complete" ? "river" : hand.street,
-    betSizingBb: [],
   }), [hand.street]);
   const currentProfile = OPPONENT_PROFILES.find((item) => item.id === profile)!;
 
@@ -187,7 +187,7 @@ export function App() {
         </div>
         <div className="intro-note">
           <span className="status-dot" />
-          <div><strong>Transparent by design</strong><span>No verified solver data is loaded. Coaching is explicitly approximate.</span></div>
+          <div><strong>Transparent by design</strong><span>One exact river demo has solver data. Live coaching remains approximate.</span></div>
         </div>
       </section>
 
@@ -321,7 +321,7 @@ export function App() {
                 <div><span>Current heuristic strength score</span><b className="approx-value">{(coach.strengthScore * 100).toFixed(0)} / 100</b></div>
               </div>
             </details>
-            <p className="metrics-footnote">Solver coverage: <strong>{VERIFIED_SOLVER_SPOT_COUNT} verified spots</strong>. {solverLookup.reason}</p>
+            <p className="metrics-footnote">Solver coverage: <strong>{VERIFIED_SOLVER_SPOT_COUNT} verified demo spot</strong>. Live hand lookup: {solverLookup.reason}</p>
           </section>
 
           <section className="profile-card">
@@ -331,6 +331,8 @@ export function App() {
           </section>
         </aside>
       </section>
+
+      <SolverDemo />
 
       <section className="simulation-section" id="simulation">
         <div className="simulation-header"><div><p className="eyebrow">REPRODUCIBLE · HEADLESS · NO TABLE RENDERING</p><h2>Simulation lab</h2><p>Run hundreds or thousands of hands in a worker, then download the raw data and a charted PDF report.</p></div><div className="sim-number"><span>01</span><small>SIMULATE</small></div></div>
@@ -349,9 +351,9 @@ export function App() {
             <Button onClick={async () => download("poker-gto-report.pdf", await createSimulationPdf(simulation), "application/pdf")}>PDF report</Button>
           </div></div>
           <div className="result-metrics"><div><span>{OPPONENT_PROFILES.find((item) => item.id === simulation.profiles.p0)?.name} wins</span><b>{simulation.outcomes.p0Wins}</b></div><div><span>{OPPONENT_PROFILES.find((item) => item.id === simulation.profiles.p1)?.name} wins</span><b>{simulation.outcomes.p1Wins}</b></div><div><span>Split pots</span><b>{simulation.outcomes.ties}</b></div><div><span>Average pot</span><b>{simulation.chipResults.averagePot.toFixed(1)}<small> chips</small></b></div></div>
-          <p className="sim-caveat">Action counts are empirical profile behavior. Verified solver coverage is 0; agreement and solver EV loss are unavailable.</p>
+          <p className="sim-caveat">Action counts are empirical profile behavior. The separate river demo is not used by these simulations; solver agreement and EV loss remain unavailable.</p>
         </div>}
-        <div className="simulation-rule"><span>NO SOLVER CLAIMS</span><span>REPRODUCIBLE SEEDS</span><span>PLAY-MONEY ONLY</span><span>ZERO VERIFIED COVERAGE</span></div>
+        <div className="simulation-rule"><span>NO SOLVER CLAIMS FOR LIVE PLAY</span><span>REPRODUCIBLE SEEDS</span><span>PLAY-MONEY ONLY</span><span>ONE EXACT DEMO SPOT</span></div>
       </section>
 
       <footer className="footer"><a className="wordmark" href="#top"><span className="mark">♠</span> POKER <b>GTO</b> LAB</a><p>For learning and play only. No real-money play. No claim of full-game GTO accuracy.</p><a href="https://github.com/mylo123ai-hue/Poker-GTO-v1" target="_blank" rel="noreferrer">Source repository ↗</a></footer>

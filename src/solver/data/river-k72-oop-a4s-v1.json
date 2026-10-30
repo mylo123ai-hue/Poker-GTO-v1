@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "datasetId": "river-k72-oop-a4s-v1",
+  "solver": {
+    "repository": "https://github.com/ucsandman/postflop",
+    "commit": "5fc7ee3d92b823b6c58e4f58cbee7d50d5e9e6de",
+    "engineVersion": "0.1.0",
+    "license": "MIT",
+    "localPatch": "codex/patches/ucsandman-postflop-5fc7ee3-fix-zero-sum-gains.patch"
+  },
+  "scenario": {
+    "players": 2,
+    "street": "river",
+    "board": [
+      "Ks",
+      "7d",
+      "2c",
+      "8h",
+      "3d"
+    ],
+    "oopRange": "KK,A4s,A5s",
+    "ipRange": "TT,JJ",
+    "effectiveStackChips": 20,
+    "startingPotChips": 10,
+    "rakePercent": 0,
+    "rakeCapChips": 0,
+    "allinThresholdPercent": 67,
+    "positionToAct": "OOP",
+    "history": [],
+    "raiseCap": 1,
+    "actions": {
+      "oopRiverBetPercent": [
+        100
+      ],
+      "oopRiverBetAllIn": false,
+      "oopRiverRaisePercent": [],
+      "oopRiverRaiseAllIn": false,
+      "ipRiverBetPercent": [
+        100
+      ],
+      "ipRiverBetAllIn": false,
+      "ipRiverRaisePercent": [
+        100
+      ],
+      "ipRiverRaiseAllIn": false
+    }
+  },
+  "decision": {
+    "player": "OOP",
+    "combo": "As4s",
+    "rootComboCount": 11,
+    "opponentComboCount": 12,
+    "actions": [
+      {
+        "action": "Check",
+        "kind": "check",
+        "amountChips": null,
+        "frequency": 0.8123879
+      },
+      {
+        "action": "Bet 10 chips",
+        "kind": "bet",
+        "amountChips": 10,
+        "frequency": 0.18761203
+      }
+    ],
+    "recommendedAction": "Check"
+  },
+  "result": {
+    "iterations": 1700,
+    "measuredExploitabilityChips": 0.00097221136,
+    "measuredExploitabilityPercentOfPot": 0.009722114,
+    "expectedValue": {
+      "chips": -0.9090907,
+      "perspective": "OOP",
+      "scope": "root range-average net chip EV against the solver profile"
+    },
+    "payoffUnit": "chips"
+  },
+  "provenance": {
+    "sourceConfigSha256": "0b19b11b96d15034a2d82b62180af748d2f217eddacdea9dca7878ec5a4ee436",
+    "convergenceTargetPercentOfPot": 0.01,
+    "maxIterations": 2000,
+    "dcfr": {
+      "alpha": 1.5,
+      "beta": 0,
+      "gamma": 2
+    },
+    "chanceSampling": false,
+    "wallSecondsExcludedFromExport": true
+  }
+}

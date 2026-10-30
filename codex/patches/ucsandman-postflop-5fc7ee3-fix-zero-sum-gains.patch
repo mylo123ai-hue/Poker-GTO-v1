@@ -1,0 +1,89 @@
+diff --git a/engine/src/br.rs b/engine/src/br.rs
+index 7a220ca..ab4fb63 100644
+--- a/engine/src/br.rs
++++ b/engine/src/br.rs
+@@ -19 +19 @@
+-//! equilibrium values cancel. Reported in chips and as a percentage of
++//! profile values cancel. Reported in chips and as a percentage of
+@@ -45,3 +45,2 @@
+-//! their sum, **NashConv**. In a zero-sum game `EV_0 + EV_1 == 0`, so NashConv is
+-//! numerically the figure this module has always reported: `gain` is then exactly `br`,
+-//! and the chip path takes that branch without the two extra walks, bit for bit.
++//! their sum, **NashConv**. In a zero-sum game `EV_0 + EV_1 == 0`, so NashConv equals
++//! `BR_0 + BR_1`; each individual gain still requires subtracting that player's EV.
+@@ -105,2 +104,2 @@ pub struct ExploitReport {
+-    /// their own. In a zero-sum game the two equilibrium values cancel in the sum, so
+-    /// this is exactly `br` and is produced without the extra walks.
++    /// their own. The gain is computed separately from each player's best-response
++    /// payoff, including in zero-sum games.
+@@ -108,2 +107,3 @@ pub struct ExploitReport {
+-    /// `gain[0] + gain[1]`. The total exploitability in a zero-sum game (where it also
+-    /// equals `br[0] + br[1]`); **NashConv** in a general-sum one. Zero at equilibrium.
++    /// Total exploitability in a zero-sum game (`br[0] + br[1]`, retained bit-for-bit
++    /// for historical chip reports) and **NashConv** in a general-sum game. It equals
++    /// the sum of `gain` up to f32 rounding. Zero at equilibrium.
+@@ -131,11 +131,7 @@ pub fn exploitability<G: Game, P: StrategyProfile>(game: &G, profile: &P) -> Exp
+-    // Zero-sum: `EV_0 + EV_1 == 0`, so `gain[0] + gain[1] == br[0] + br[1]` exactly and
+-    // the two expected-value walks would only recompute a cancelling pair. Taking this
+-    // branch is what keeps every chip solve bit-identical to before `gain` existed.
+-    let gain = if game.zero_sum() {
+-        br
+-    } else {
+-        [
+-            br[0] - expected_value(game, 0, profile),
+-            br[1] - expected_value(game, 1, profile),
+-        ]
+-    };
++    // A best-response payoff is not itself a unilateral gain: subtract the payoff of
++    // the profile for each player. In zero-sum games these EVs cancel in the sum, so
++    // NashConv remains equal to `br[0] + br[1]` up to floating-point rounding.
++    let gain = [
++        br[0] - expected_value(game, 0, profile),
++        br[1] - expected_value(game, 1, profile),
++    ];
+@@ -146 +142,5 @@ pub fn exploitability<G: Game, P: StrategyProfile>(game: &G, profile: &P) -> Exp
+-    let chips = gain[0] + gain[1];
++    let chips = if game.zero_sum() {
++        br[0] + br[1]
++    } else {
++        gain[0] + gain[1]
++    };
+diff --git a/engine/src/nlhe.rs b/engine/src/nlhe.rs
+index 0d18ffb..0f13fd5 100644
+--- a/engine/src/nlhe.rs
++++ b/engine/src/nlhe.rs
+@@ -2134,3 +2134,2 @@ mod tests {
+-    /// In the chip game `gain` is the best-response value itself, bit for bit, and the
+-    /// two sum to exactly the number this crate has always called exploitability. That
+-    /// identity is what makes the new field free on the chip path.
++    /// In a chip game each player's unilateral gain is its best-response value minus
++    /// its profile EV; their sum is exploitability because the profile EVs cancel.
+@@ -2138 +2137 @@ mod tests {
+-    fn gain_is_the_best_response_value_in_the_chip_game() {
++    fn gains_are_deviation_values_in_the_chip_game() {
+@@ -2143,5 +2142,8 @@ mod tests {
+-            assert_eq!(r.gain, r.br, "{name}: gain must be br exactly");
+-            assert_eq!(
+-                r.gain[0] + r.gain[1],
+-                r.chips,
+-                "{name}: gain must sum to the reported figure"
++            for player in 0..2 {
++                let expected_gain = r.br[player] - s.expected_value(player as u8);
++                assert!(r.gain[player] >= -1e-3, "{name}: unilateral gain must be non-negative");
++                assert!((r.gain[player] - expected_gain).abs() < 1e-6, "{name}: gain must be BR value minus profile EV");
++            }
++            assert!(
++                (r.gain[0] + r.gain[1] - r.chips).abs() < 1e-6,
++                "{name}: gains must sum to exploitability within f32 rounding"
+diff --git a/engine/src/solution.rs b/engine/src/solution.rs
+index e3c4382..3eec705 100644
+--- a/engine/src/solution.rs
++++ b/engine/src/solution.rs
+@@ -238,2 +238,2 @@ impl Solution {
+-                // NashConv. In the chip case `report.gain` is `report.br` exactly, so
+-                // this line is unchanged for every chip solve.
++                // NashConv. Each stored `gain` is the best-response value minus the
++                // profile EV, in both chip and tournament games.
+@@ -567 +567 @@ mod tests {
+-        // ...and a chip solve of the same spot still says chips, with `gain == br`.
++        // ...and a chip solve of the same spot still says chips.

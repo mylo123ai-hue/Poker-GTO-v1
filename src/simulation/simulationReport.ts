@@ -59,7 +59,7 @@ export function simulationToCsv(result: SimulationResult): string {
     ties: String(result.outcomes.ties),
     showdowns: String(result.outcomes.showdowns),
     folds: String(result.outcomes.folds),
-    notes: "Agreement and solver EV loss are unavailable without a verified solver reference.",
+    notes: "No matching solver decision is used by these heuristic-profile simulations; agreement and solver EV loss are unavailable.",
   });
   for (const failure of result.failures) {
     rows.push({
@@ -90,7 +90,7 @@ export async function createSimulationPdf(result: SimulationResult): Promise<Uin
   document.text(`Seed ${result.seed}  |  ${result.handsCompleted}/${result.handsRequested} hands  |  runtime ${result.runtimeMs.toFixed(1)} ms`, left, 72);
   document.text(`Profiles: ${result.profiles.p0} vs ${result.profiles.p1}  |  starting stack ${result.startingStackChips} chips  |  blinds 1/${result.blinds.big}`, left, 88);
   document.text(`Code SHA: ${result.codeSha}`, left, 104);
-  document.text(`Solver data SHA: ${result.solverDataSha ?? "none — no verified solver dataset loaded"}`, left, 120);
+  document.text(`Solver data SHA: ${result.solverDataSha ?? "not used — the separate river demo is not part of this simulation"}`, left, 120);
 
   document.setFont("helvetica", "bold");
   document.setFontSize(13);
@@ -141,7 +141,7 @@ export async function createSimulationPdf(result: SimulationResult): Promise<Uin
   document.setFontSize(10);
   const caveats = [
     `Verified solver spots: ${result.solverCoverage.verifiedSpots}; eligible decisions: ${result.solverCoverage.eligibleDecisions}; coverage ${result.solverCoverage.coveragePercent.toFixed(2)}%.`,
-    "Agreement and solver EV loss were not computed because no verified solver reference exists.",
+    "Agreement and solver EV loss were not computed; this simulation does not evaluate a matching solver decision.",
     "Action frequencies describe these heuristic opponents only; they are not GTO frequencies.",
     `Net chips: P0 ${result.chipResults.p0Net}; P1 ${result.chipResults.p1Net}; total ${result.chipResults.totalNet}. Results depend on this seed, stack, and profiles.`,
   ];
