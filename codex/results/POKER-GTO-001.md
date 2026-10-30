@@ -7,6 +7,7 @@
 - Handoff revision read in full: [`codex/handoffs/POKER-GTO-001.md`](../handoffs/POKER-GTO-001.md), commit `092536685cb54f57ffb4a1e9d8c9619db2ba04c6` on `codex/poker-gto-001-handoff`.
 - Implementation branch: `codex/poker-gto-001-implementation`.
 - Implementation code commit: `bf8c52fbab937cf738c666f1a8b7d53c73b759a7`.
+- First publication of this report and the sample simulation files: commit `d1074d6609bfc6be8c50fdbecab7c3c1990108c5`.
 - Pull request: [#1 — Implement POKER-GTO-001 heads-up trainer](https://github.com/mylo123ai-hue/Poker-GTO-v1/pull/1), open and unmerged, targeting `main`.
 - Results path: `codex/results/POKER-GTO-001.md`.
 
@@ -78,6 +79,8 @@ GitHub Actions runs for code commit `bf8c52fbab937cf738c666f1a8b7d53c73b759a7`:
 
 - [Run #1 — push](https://github.com/mylo123ai-hue/Poker-GTO-v1/actions/runs/40982393936): `validate` and `browser-smoke` succeeded. Uploaded artifact `poker-gto-simulation-report`, SHA-256 `65509a927d752ff8d886f6f37f36eceea331796b305aad09aec345b44e0fe9f9`.
 - [Run #2 — pull request](https://github.com/mylo123ai-hue/Poker-GTO-v1/actions/runs/40982406625): `validate` and `browser-smoke` succeeded. Uploaded artifact `poker-gto-simulation-report`, SHA-256 `23034f6a02d0390aa603c095461d80e2961fbb04e17ef051fb885324b8f7dc40`.
+- [Run #3 — results-publication push](https://github.com/mylo123ai-hue/Poker-GTO-v1/actions/runs/40982638330), commit `d1074d6609bfc6be8c50fdbecab7c3c1990108c5`: both jobs succeeded. Uploaded `poker-gto-simulation-report`, SHA-256 `a00991e147cda06d5b050fd466e5b876e9647acf2ce59e2e0fe1e3259681122e`.
+- [Run #4 — results-publication pull request](https://github.com/mylo123ai-hue/Poker-GTO-v1/actions/runs/40982646013), commit `d1074d6609bfc6be8c50fdbecab7c3c1990108c5`: both jobs succeeded. Uploaded `poker-gto-simulation-report`, SHA-256 `55bd28c63562857fab6efd7980d2ffa3a4dd11ea52307d99030b8eb808c8b558`.
 
 ### Resolved validation issues
 
