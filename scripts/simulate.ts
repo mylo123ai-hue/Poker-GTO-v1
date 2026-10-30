@@ -27,7 +27,6 @@ const result = runSimulation({
   firstProfile,
   secondProfile,
   codeSha,
-  solverDataSha: null,
 });
 
 mkdirSync(outDir, { recursive: true });

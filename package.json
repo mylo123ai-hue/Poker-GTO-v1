@@ -1,5 +1,5 @@
 {
-  "name": "poker-gto-trainer",
+  "name": "poker-practice-trainer",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -8,10 +8,12 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 0.0.0.0",
     "typecheck": "tsc --noEmit",
+    "check:pages-build": "node scripts/checkPagesBuild.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "simulate": "tsx scripts/simulate.ts",
+    "simulate:matches": "tsx scripts/simulateMatches.ts",
     "solver:export": "tsx scripts/exportSolverData.ts",
     "simulate:sample": "tsx scripts/simulate.ts --hands 1000 --seed 20261030 --out reports/sample"
   },

@@ -11,11 +11,9 @@ describe("headless simulations and reports", () => {
     expect(first.handsCompleted).toBe(300);
     expect(first.failures).toEqual([]);
     expect(first.chipResults.totalNet).toBe(0);
-    expect(first.solverCoverage.verifiedSpots).toBe(0);
-    expect(first.solverCoverage.eligibleDecisions).toBeGreaterThan(0);
-    expect(first.solverCoverage.coveragePercent).toBe(0);
-    expect(first.solverAgreement).toBeNull();
-    expect(first.solverExpectedValueLoss).toBeNull();
+    expect(first.schemaVersion).toBe(2);
+    expect(first).not.toHaveProperty("solverCoverage");
+    expect(first).not.toHaveProperty("solverDataSha");
   });
 
   it("conserves chips across shallow, short, and full stacks", () => {
@@ -33,7 +31,7 @@ describe("headless simulations and reports", () => {
     }
   });
 
-  it("exports machine-readable JSON/CSV and a PDF report with solver caveats", async () => {
+  it("exports machine-readable JSON/CSV and a PDF report with strategy limitations", async () => {
     const result = runSimulation({ hands: 25, seed: "files", firstProfile: "tight", secondProfile: "caller", codeSha: "abc123" });
     const json = simulationToJson(result);
     const csv = simulationToCsv(result);
@@ -41,7 +39,9 @@ describe("headless simulations and reports", () => {
     expect(JSON.parse(json).codeSha).toBe("abc123");
     expect(csv).toContain("\"seed\",\"player\"");
     expect(csv).toContain("abc123");
-    expect(csv).toContain("not solver frequencies");
+    expect(csv).toContain("no ground-truth strategy benchmark");
+    expect(new TextDecoder().decode(pdf)).toContain("Heads-up simulation report");
+    expect(csv).not.toMatch(/solver|GTO/i);
     expect(new TextDecoder().decode(pdf.slice(0, 4))).toBe("%PDF");
     expect(pdf.byteLength).toBeGreaterThan(1000);
   });

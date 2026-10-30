@@ -9,7 +9,7 @@ import {
 } from "./adapter";
 
 const sourcePath = new URL("./data/river-k72-oop-a4s-v1.json", import.meta.url);
-const manifestPath = new URL("../../public/solver-manifest.json", import.meta.url);
+const manifestPath = new URL("../../codex/solver-fixtures/river-k72-oop-a4s-v1-manifest.json", import.meta.url);
 const configPath = new URL("../../codex/solver-fixtures/river-k72-oop-a4s-v1.toml", import.meta.url);
 const patchPath = new URL("../../codex/patches/ucsandman-postflop-5fc7ee3-fix-zero-sum-gains.patch", import.meta.url);
 const licensePath = new URL("../../codex/third-party/ucsandman-postflop-LICENSE.txt", import.meta.url);

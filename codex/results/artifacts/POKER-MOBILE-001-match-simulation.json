@@ -1,0 +1,22 @@
+{
+  "seed": "20261030",
+  "settings": {
+    "startingStackChips": 40,
+    "smallBlindChips": 1,
+    "bigBlindChips": 2
+  },
+  "profiles": {
+    "p0": "balanced",
+    "p1": "aggressive"
+  },
+  "matchesRequested": 10,
+  "matchesCompleted": 10,
+  "handsCompleted": 231,
+  "outcomes": {
+    "p0Wins": 6,
+    "p1Wins": 4
+  },
+  "averageHandsToElimination": 23.1,
+  "chipsConserved": true,
+  "failures": []
+}

@@ -9,11 +9,10 @@ export type SimulationOptions = {
   secondProfile: OpponentProfile;
   startingStack?: number;
   codeSha?: string;
-  solverDataSha?: string | null;
 };
 
 export type SimulationResult = {
-  schemaVersion: 1;
+  schemaVersion: 2;
   seed: string;
   handsRequested: number;
   handsCompleted: number;
@@ -24,11 +23,7 @@ export type SimulationResult = {
   chipResults: { p0Net: number; p1Net: number; totalNet: number; averagePot: number };
   actionCounts: Record<PlayerId, Record<PokerAction["type"], number>>;
   actionFrequency: Record<PlayerId, Record<PokerAction["type"], number>>;
-  solverCoverage: { verifiedSpots: number; eligibleDecisions: number; coveragePercent: number };
-  solverAgreement: null;
-  solverExpectedValueLoss: null;
   codeSha: string;
-  solverDataSha: string | null;
   runtimeMs: number;
   failures: { hand: number; message: string }[];
 };
@@ -98,12 +93,9 @@ export function runSimulation(options: SimulationOptions): SimulationResult {
       actionFrequency[playerId][action] = total === 0 ? 0 : actionCounts[playerId][action] / total;
     }
   }
-  const eligibleDecisions = ACTIONS.reduce((sum, action) => sum + actionCounts.p0[action] + actionCounts.p1[action], 0);
-  // This batch runs the authored heuristic profiles. The separate static solver demo
-  // does not match or evaluate any decisions in this simulation.
-  const coveragePercent = 0;
+  // This batch compares authored heuristic profiles; no external strategy benchmark is used.
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     seed: String(options.seed),
     handsRequested: options.hands,
     handsCompleted,
@@ -119,11 +111,7 @@ export function runSimulation(options: SimulationOptions): SimulationResult {
     },
     actionCounts,
     actionFrequency,
-    solverCoverage: { verifiedSpots: 0, eligibleDecisions, coveragePercent },
-    solverAgreement: null,
-    solverExpectedValueLoss: null,
     codeSha: options.codeSha ?? "UNSPECIFIED",
-    solverDataSha: options.solverDataSha ?? null,
     runtimeMs: performance.now() - started,
     failures,
   };

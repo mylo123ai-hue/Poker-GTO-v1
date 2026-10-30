@@ -39,6 +39,24 @@ describe("heads-up hand engine", () => {
     expect(flop.currentActor).toBe("p1");
   });
 
+  it("uses configurable blinds and handles stacks shorter than a blind", () => {
+    const custom = createHand({ seed: "custom-blinds", stack: 100, smallBlind: 2, bigBlind: 5 });
+    expect(custom.players.map((player) => player.streetCommitted)).toEqual([2, 5]);
+    expect(custom.currentBet).toBe(5);
+    expect(custom.lastFullRaise).toBe(5);
+    expect(availableActions(custom, "p0").minRaiseTo).toBe(10);
+
+    const shortButton = createHand({
+      seed: "button-short-blind",
+      button: "p0",
+      startingStacks: { p0: 1, p1: 20 },
+    });
+    expect(shortButton.street).toBe("complete");
+    expect(shortButton.currentActor).toBeNull();
+    expect(shortButton.players[0].stack + shortButton.players[1].stack).toBe(21);
+    expect(shortButton.result?.reason).toBe("showdown");
+  });
+
   it("enforces minimum full raises and accepts a short all-in size", () => {
     const state = createHand({ seed: 8, stack: 20 });
     expect(availableActions(state, "p0").minRaiseTo).toBe(4);
@@ -75,6 +93,28 @@ describe("heads-up hand engine", () => {
     const resolution = calculateSidePots({ p0: 16, p1: 5 });
     expect(resolution.refunds).toEqual({ p0: 11, p1: 0 });
     expect(resolution.pots).toEqual([{ amount: 10, eligible: ["p0", "p1"] }]);
+  });
+
+  it("splits a tied showdown and preserves all chips", () => {
+    const state = createHand({ seed: "board-tie" });
+    const board = [c(10, "spades"), c(11, "spades"), c(12, "spades"), c(13, "spades"), c(14, "spades")];
+    state.board = board;
+    state.street = "river";
+    state.currentActor = "p0";
+    state.currentBet = 0;
+    state.actedThisStreet = [];
+    state.players[0].holeCards = [c(2, "clubs"), c(3, "clubs")];
+    state.players[1].holeCards = [c(4, "clubs"), c(5, "clubs")];
+    for (const player of state.players) {
+      player.stack = 196;
+      player.totalCommitted = 4;
+      player.streetCommitted = 0;
+    }
+    let resultState = applyAction(state, { type: "check" });
+    resultState = applyAction(resultState, { type: "check" });
+    expect(resultState.result?.winner).toBe("tie");
+    expect(resultState.result?.payouts).toEqual({ p0: 4, p1: 4 });
+    expect(resultState.players[0].stack + resultState.players[1].stack).toBe(400);
   });
 
   it("refunds excess chips after a short all-in call before the showdown", () => {
