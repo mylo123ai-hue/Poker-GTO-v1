@@ -83,10 +83,24 @@ export function createHand(options: {
   seed: string | number;
   button?: PlayerId;
   stack?: number;
+  startingStacks?: Record<PlayerId, number>;
+  smallBlind?: number;
+  bigBlind?: number;
 }): HandState {
-  const stack = options.stack ?? DEFAULT_STACK;
-  if (!Number.isSafeInteger(stack) || stack < BIG_BLIND) {
-    throw new RangeError(`Each starting stack must be an integer of at least ${BIG_BLIND} chips.`);
+  const smallBlind = options.smallBlind ?? SMALL_BLIND;
+  const bigBlind = options.bigBlind ?? BIG_BLIND;
+  if (!Number.isSafeInteger(smallBlind) || smallBlind < 1 || !Number.isSafeInteger(bigBlind) || bigBlind <= smallBlind) {
+    throw new RangeError("Blinds must be positive integers with the big blind larger than the small blind.");
+  }
+  const symmetricStack = options.stack ?? DEFAULT_STACK;
+  const startingStacks = options.startingStacks ?? { p0: symmetricStack, p1: symmetricStack };
+  for (const id of ["p0", "p1"] as const) {
+    if (!Number.isSafeInteger(startingStacks[id]) || startingStacks[id] < 1) {
+      throw new RangeError("Each starting stack must be a positive integer.");
+    }
+  }
+  if (!options.startingStacks && symmetricStack < bigBlind) {
+    throw new RangeError(`Each starting stack must be an integer of at least ${bigBlind} chips.`);
   }
   const button = options.button ?? "p0";
   const blind = opponentOf(button);
@@ -94,18 +108,21 @@ export function createHand(options: {
     seed: String(options.seed),
     deck: shuffledDeck(options.seed),
     deckCursor: 0,
-    players: [newPlayer("p0", "You", stack), newPlayer("p1", "Opponent", stack)],
+    players: [newPlayer("p0", "You", startingStacks.p0), newPlayer("p1", "Opponent", startingStacks.p1)],
     board: [],
     button,
     street: "preflop",
     currentActor: button,
-    currentBet: BIG_BLIND,
-    lastFullRaise: BIG_BLIND,
+    currentBet: 0,
+    lastFullRaise: bigBlind,
     actedThisStreet: [],
     raiseRights: ["p0", "p1"],
     actions: [],
     actionCount: 0,
-    initialStack: stack,
+    initialStack: Math.min(startingStacks.p0, startingStacks.p1),
+    startingStacks: { ...startingStacks },
+    smallBlind,
+    bigBlind,
     originalPot: 0,
     result: null,
   };
@@ -116,9 +133,13 @@ export function createHand(options: {
   const fourthCard = takeCard(state);
   state.players[playerIndex(button)].holeCards = [firstCard, thirdCard];
   state.players[playerIndex(blind)].holeCards = [secondCard, fourthCard];
-  putOnStreet(state, button, SMALL_BLIND);
-  putOnStreet(state, blind, BIG_BLIND);
+  putOnStreet(state, button, smallBlind);
+  putOnStreet(state, blind, bigBlind);
+  state.currentBet = Math.max(state.players[0].streetCommitted, state.players[1].streetCommitted);
   state.originalPot = potSize(state);
+  // If the button cannot act after posting its blind, no opponent can make
+  // another wager. Return unmatched chips and deal the board automatically.
+  if (state.players[playerIndex(button)].allIn) runOut(state);
 
   return state;
 }
@@ -140,9 +161,9 @@ export function availableActions(state: HandState, playerId: PlayerId): Availabl
     && maxRaiseTo > state.currentBet;
   return {
     toCall,
-    canFold: isTurn && toCall > 0,
-    canCheck: isTurn && toCall === 0,
-    canCall: isTurn && toCall > 0 && player.stack > 0,
+    canFold: isTurn && !player.allIn && toCall > 0,
+    canCheck: isTurn && !player.allIn && toCall === 0,
+    canCall: isTurn && !player.allIn && toCall > 0 && player.stack > 0,
     canRaise,
     minRaiseTo,
     maxRaiseTo,
@@ -159,6 +180,8 @@ export function playerView(state: HandState, playerId: PlayerId): import("./type
     street: state.street,
     pot: potSize(state),
     stack: state.players[playerIndex(playerId)].stack,
+    streetCommitted: state.players[playerIndex(playerId)].streetCommitted,
+    currentBet: state.currentBet,
     toCall: actions.toCall,
     callAmount: actions.callAmount,
     canCheck: actions.canCheck,
@@ -166,6 +189,8 @@ export function playerView(state: HandState, playerId: PlayerId): import("./type
     minRaiseTo: actions.minRaiseTo,
     maxRaiseTo: actions.maxRaiseTo,
     position: playerId === state.button ? "button" : "big blind",
+    smallBlind: state.smallBlind,
+    bigBlind: state.bigBlind,
   };
 }
 
@@ -345,7 +370,7 @@ function dealNextStreet(state: HandState): void {
   state.players[0].streetCommitted = 0;
   state.players[1].streetCommitted = 0;
   state.currentBet = 0;
-  state.lastFullRaise = BIG_BLIND;
+  state.lastFullRaise = state.bigBlind;
   state.actedThisStreet = [];
   state.raiseRights = ["p0", "p1"];
   state.currentActor = opponentOf(state.button);
@@ -443,6 +468,6 @@ export function recommendBetTo(state: HandState, fractionOfPot: number): number 
   if (!actions.canRaise) return 0;
   const potAfterCall = potSize(state) + actions.toCall;
   const desiredRaise = Math.ceil(potAfterCall * Math.max(0, fractionOfPot));
-  const desiredTo = state.currentBet + Math.max(1, desiredRaise);
+  const desiredTo = state.currentBet + Math.max(state.bigBlind, desiredRaise);
   return Math.min(actions.maxRaiseTo, Math.max(actions.minRaiseTo, desiredTo));
 }

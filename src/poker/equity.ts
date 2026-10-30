@@ -15,6 +15,18 @@ export type EquityEstimate = {
   opponentModel: "uniform random legal hand";
 };
 
+export function equitySamplingRange95(estimate: EquityEstimate): { low: number; high: number } {
+  const z = 1.96;
+  const z2 = z * z;
+  const denominator = 1 + z2 / estimate.samples;
+  const center = (estimate.equity + z2 / (2 * estimate.samples)) / denominator;
+  const margin = z * Math.sqrt(estimate.equity * (1 - estimate.equity) / estimate.samples + z2 / (4 * estimate.samples * estimate.samples)) / denominator;
+  return {
+    low: Math.max(0, center - margin),
+    high: Math.min(1, center + margin),
+  };
+}
+
 export function estimateEquity(
   ownCards: Card[],
   board: Card[],

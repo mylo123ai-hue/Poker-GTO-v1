@@ -1,4 +1,4 @@
-name: Validate Poker GTO Lab
+name: Validate Poker Practice Trainer
 
 on:
   push:
@@ -20,13 +20,18 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - run: npm run check:pages-build
       - name: Run seeded 1,000-hand simulation
         run: npm run simulate -- --hands 1000 --seed 20261030 --p0 balanced --p1 aggressive --out artifacts/simulation
+      - name: Run seeded continuous match simulations
+        run: npm run simulate:matches -- --matches 10 --seed 20261030 --stack 40 --small-blind 1 --big-blind 2 --p0 balanced --p1 aggressive --out artifacts/matches/results.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: poker-gto-simulation-report
-          path: artifacts/simulation/
+          name: poker-practice-simulation-reports
+          path: |
+            artifacts/simulation/
+            artifacts/matches/
           if-no-files-found: warn
 
   browser-smoke:

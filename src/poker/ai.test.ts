@@ -17,6 +17,8 @@ describe("opponent profiles", () => {
       street: "preflop",
       pot: 5,
       stack: 200,
+      streetCommitted: 1,
+      currentBet: 2,
       toCall: 1,
       callAmount: 1,
       canCheck: false,
@@ -24,6 +26,8 @@ describe("opponent profiles", () => {
       minRaiseTo: 4,
       maxRaiseTo: 200,
       position: "button",
+      smallBlind: 1,
+      bigBlind: 2,
     };
     const choices = OPPONENT_PROFILES.map((profile) => chooseAIAction(view, profile.id, () => 0.25));
     expect(choices.map((choice) => `${choice.type}:${choice.type === "raise" ? choice.amountTo : ""}`)).toEqual(

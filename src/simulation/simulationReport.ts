@@ -5,8 +5,7 @@ export function simulationToCsv(result: SimulationResult): string {
     "record", "seed", "player", "profile", "hands_requested", "hands_completed",
     "fold", "check", "call", "raise", "fold_frequency", "check_frequency", "call_frequency", "raise_frequency",
     "p0_net_chips", "p1_net_chips", "total_net_chips", "average_pot_chips",
-    "p0_wins", "p1_wins", "ties", "showdowns", "folds", "runtime_ms", "code_sha", "solver_data_sha",
-    "verified_solver_spots", "eligible_decisions", "coverage_percent", "solver_agreement", "solver_expected_value_loss",
+    "p0_wins", "p1_wins", "ties", "showdowns", "folds", "runtime_ms", "code_sha",
     "failure_count", "failed_hand", "failure_message", "notes",
   ];
   const runMetadata = {
@@ -15,12 +14,6 @@ export function simulationToCsv(result: SimulationResult): string {
     hands_completed: String(result.handsCompleted),
     runtime_ms: String(result.runtimeMs),
     code_sha: result.codeSha,
-    solver_data_sha: result.solverDataSha ?? "",
-    verified_solver_spots: String(result.solverCoverage.verifiedSpots),
-    eligible_decisions: String(result.solverCoverage.eligibleDecisions),
-    coverage_percent: String(result.solverCoverage.coveragePercent),
-    solver_agreement: "",
-    solver_expected_value_loss: "",
     failure_count: String(result.failures.length),
   };
   const rows: Record<string, string>[] = [];
@@ -42,7 +35,7 @@ export function simulationToCsv(result: SimulationResult): string {
       p1_net_chips: String(result.chipResults.p1Net),
       total_net_chips: String(result.chipResults.totalNet),
       average_pot_chips: String(result.chipResults.averagePot),
-      notes: "Empirical behavior of selected heuristic profiles; not solver frequencies.",
+      notes: "Empirical action frequencies from selected heuristic profiles; no ground-truth strategy benchmark.",
     });
   }
   rows.push({
@@ -59,7 +52,7 @@ export function simulationToCsv(result: SimulationResult): string {
     ties: String(result.outcomes.ties),
     showdowns: String(result.outcomes.showdowns),
     folds: String(result.outcomes.folds),
-    notes: "No matching solver decision is used by these heuristic-profile simulations; agreement and solver EV loss are unavailable.",
+    notes: "No strategy benchmark or optimality estimate is included; results describe these heuristic profiles only.",
   });
   for (const failure of result.failures) {
     rows.push({
@@ -90,7 +83,7 @@ export async function createSimulationPdf(result: SimulationResult): Promise<Uin
   document.text(`Seed ${result.seed}  |  ${result.handsCompleted}/${result.handsRequested} hands  |  runtime ${result.runtimeMs.toFixed(1)} ms`, left, 72);
   document.text(`Profiles: ${result.profiles.p0} vs ${result.profiles.p1}  |  starting stack ${result.startingStackChips} chips  |  blinds 1/${result.blinds.big}`, left, 88);
   document.text(`Code SHA: ${result.codeSha}`, left, 104);
-  document.text(`Solver data SHA: ${result.solverDataSha ?? "not used — the separate river demo is not part of this simulation"}`, left, 120);
+  document.text("Strategy benchmark: none; this report describes heuristic profiles only.", left, 120);
 
   document.setFont("helvetica", "bold");
   document.setFontSize(13);
@@ -136,13 +129,12 @@ export async function createSimulationPdf(result: SimulationResult): Promise<Uin
 
   document.setFont("helvetica", "bold");
   document.setFontSize(12);
-  document.text("Solver coverage and limits", left, 528);
+  document.text("Interpretation and limits", left, 528);
   document.setFont("helvetica", "normal");
   document.setFontSize(10);
   const caveats = [
-    `Verified solver spots: ${result.solverCoverage.verifiedSpots}; eligible decisions: ${result.solverCoverage.eligibleDecisions}; coverage ${result.solverCoverage.coveragePercent.toFixed(2)}%.`,
-    "Agreement and solver EV loss were not computed; this simulation does not evaluate a matching solver decision.",
-    "Action frequencies describe these heuristic opponents only; they are not GTO frequencies.",
+    "No strategy-quality benchmark, EV comparison, or optimality estimate is included.",
+    "Action frequencies describe these authored heuristic opponents only.",
     `Net chips: P0 ${result.chipResults.p0Net}; P1 ${result.chipResults.p1Net}; total ${result.chipResults.totalNet}. Results depend on this seed, stack, and profiles.`,
   ];
   caveats.forEach((line, index) => document.text(line, left, 550 + index * 16));
@@ -153,6 +145,6 @@ export async function createSimulationPdf(result: SimulationResult): Promise<Uin
 
   document.setFontSize(8);
   document.setTextColor(100);
-  document.text("Poker GTO Lab • play-money simulation • no GTO accuracy claim", left, 738);
+  document.text("Poker Practice • play-money simulation • heuristic behavior only", left, 738);
   return new Uint8Array(document.output("arraybuffer"));
 }

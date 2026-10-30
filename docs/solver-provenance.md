@@ -1,16 +1,16 @@
-# Solver provenance and coverage
+# Historical solver provenance (offline research)
 
-## Current coverage
+## Scope and current application behavior
 
-The browser contains one compact, pre-generated river decision. The standalone **Solver-backed river demo** shows the exact board, ranges, pot, stack, rake, position, action tree and combo it matches. It does not provide solver advice for the live trainer hand or use solver actions in heuristic simulations.
+This document preserves the provenance and validation record for the one river spot shipped by earlier versions. The mobile trainer no longer shows that demo, loads its data, or imports the solver adapter. The retained dataset, manifest and adapter tests are research artifacts and are not included in the static Pages build.
 
-The live lookup fails closed. A request must exactly match the dataset's complete state and `A♠4♠` combo to return `VERIFIED`; different boards, ranges, stack, pot, position, prior actions, bet sizes, all-in rules or combos return `UNAVAILABLE`. Multiway, non-river and raked requests return `UNSUPPORTED`. The count of one applies to the separate demo only; covered live and simulation decisions remain zero.
+The old adapter required an exact match to the dataset's complete state and `A♠4♠` combo to return `VERIFIED`; different boards, ranges, stack, pot, position, prior actions, bet sizes, all-in rules or combos returned `UNAVAILABLE`. Multiway, non-river and raked requests returned `UNSUPPORTED`. None of those lookups are part of live trainer decisions.
 
 ## Solver source and local correction
 
 The data was generated with [ucsandman/postflop](https://github.com/ucsandman/postflop) at commit [`5fc7ee3d92b823b6c58e4f58cbee7d50d5e9e6de`](https://github.com/ucsandman/postflop/tree/5fc7ee3d92b823b6c58e4f58cbee7d50d5e9e6de), dated 2026-09-02. The pinned README identifies a Rust heads-up postflop solver using Discounted CFR, a measured best-response exploitability calculation and native CLI. Its README blob is `66777e4b0fb70d30af4ec142cbee85fcaa01a90a` and its MIT license blob is `b4d61aedc881cdf35e0de23d41fac64af713a31e`.
 
-The upstream MIT license is preserved at [`codex/third-party/ucsandman-postflop-LICENSE.txt`](../codex/third-party/ucsandman-postflop-LICENSE.txt). Its SHA-256 is `4bd581dc7a60a4ffc3f1ec5c8f3bed3a681f446eff6457e6051963e83da7066d`. No solver runtime or solver implementation is shipped in the browser; the static file contains only the exported scenario metadata and numeric result.
+The upstream MIT license is preserved at [`codex/third-party/ucsandman-postflop-LICENSE.txt`](../codex/third-party/ucsandman-postflop-LICENSE.txt). Its SHA-256 is `4bd581dc7a60a4ffc3f1ec5c8f3bed3a681f446eff6457e6051963e83da7066d`. No solver runtime or solver implementation is shipped in the browser. The exported scenario and manifest remain in the repository as historical research files, not site assets.
 
 The first unmodified source test run exposed an upstream reporting bug: zero-sum `ExploitReport.gain` was set to each player's best-response payoff, although a best-response payoff can be negative and is not the player's unilateral gain. This also tripped the debug assertion in 20 tests. The local compatibility patch [`codex/patches/ucsandman-postflop-5fc7ee3-fix-zero-sum-gains.patch`](../codex/patches/ucsandman-postflop-5fc7ee3-fix-zero-sum-gains.patch) computes each gain as `BR − profile EV`, fixes the source test that encoded the incorrect assumption, and updates the associated comments. For zero-sum games it retains the historical `BR(0) + BR(1)` aggregate exploitability calculation, preserving the upstream exact fingerprints and stopping behavior. The patch SHA-256 is `e28d48c8c8532d8900b021d77077fbbbc42479a8bf0c1a7f96173985227ff04d`. The solver strategy traversal was not changed.
 
@@ -88,7 +88,7 @@ Prior review of [noambrown/poker_solver](https://github.com/noambrown/poker_solv
 
 - Only one combo-level river decision is shipped. All other hands, ranges, positions, histories, bet trees, stack/pot sizes, rake settings, streets, live hands and simulations remain uncovered.
 - The strategy and EV depend on the stated ranges and abstraction. A different opponent range, prior street, rake or sizing tree can change them.
-- The demo's combo frequencies and range-average EV have different scopes; the UI labels this explicitly.
+- Earlier demo views distinguished combo frequencies from range-average EV; these historical values are not shown by the mobile trainer.
 - The upstream solver is an open-source research tool. The result is solver-produced with measured exploitability, not a guarantee that either player is unexploitable in a larger game.
 
-Rollback by reverting the implementation commit on its isolated branch. This removes the demo, dataset, manifest row, local solver correction and exporter without changing repository settings, deploying a site, or altering external services.
+The POKER-MOBILE-001 change removes the demo from the active interface and bundle while retaining this provenance, source data and research tests. Reverting its implementation commit restores the prior application interface; it does not alter deployment or repository settings.

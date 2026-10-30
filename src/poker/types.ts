@@ -62,6 +62,9 @@ export type HandState = {
   actions: ActionRecord[];
   actionCount: number;
   initialStack: number;
+  startingStacks: Record<PlayerId, number>;
+  smallBlind: number;
+  bigBlind: number;
   originalPot: number;
   result: HandResult | null;
 };
@@ -84,6 +87,8 @@ export type PlayerView = {
   street: Street;
   pot: number;
   stack: number;
+  streetCommitted: number;
+  currentBet: number;
   toCall: number;
   callAmount: number;
   canCheck: boolean;
@@ -91,6 +96,8 @@ export type PlayerView = {
   minRaiseTo: number;
   maxRaiseTo: number;
   position: "button" | "big blind";
+  smallBlind: number;
+  bigBlind: number;
 };
 
 export type OpponentProfile = "tight" | "caller" | "aggressive" | "balanced";
