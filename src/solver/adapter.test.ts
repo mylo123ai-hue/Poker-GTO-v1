@@ -34,6 +34,7 @@ describe("solver coverage adapter", () => {
 
   it("rejects any change to the exact board, ranges, stack, pot, history, action tree, position or combo", () => {
     expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, board: ["Ks", "7d", "2c", "8h", "4d"] }).status).toBe("UNAVAILABLE");
+    expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, board: Array(5) as string[] }).status).toBe("UNAVAILABLE");
     expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, oopRange: "KK,A4s" }).status).toBe("UNAVAILABLE");
     expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, ipRange: "TT,JJ,QQ" }).status).toBe("UNAVAILABLE");
     expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, effectiveStackChips: 19 }).status).toBe("UNAVAILABLE");
@@ -42,9 +43,18 @@ describe("solver coverage adapter", () => {
     expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, allinThresholdPercent: 50 }).status).toBe("UNAVAILABLE");
     expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, positionToAct: "IP" }).status).toBe("UNAVAILABLE");
     expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, history: ["check"] }).status).toBe("UNAVAILABLE");
+    expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, raiseCap: 2 }).status).toBe("UNAVAILABLE");
     expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, actions: { ...SOLVER_DEMO_SCENARIO.actions, oopRiverBetPercent: [] } }).status).toBe("UNAVAILABLE");
+    expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, actions: { ...SOLVER_DEMO_SCENARIO.actions, oopRiverBetPercent: Array(1) as number[] } }).status).toBe("UNAVAILABLE");
+    expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, actions: { ...SOLVER_DEMO_SCENARIO.actions, oopRiverBetAllIn: true } }).status).toBe("UNAVAILABLE");
+    expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, actions: { ...SOLVER_DEMO_SCENARIO.actions, oopRiverRaisePercent: [100] } }).status).toBe("UNAVAILABLE");
+    expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, actions: { ...SOLVER_DEMO_SCENARIO.actions, oopRiverRaiseAllIn: true } }).status).toBe("UNAVAILABLE");
+    expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, actions: { ...SOLVER_DEMO_SCENARIO.actions, ipRiverBetPercent: [] } }).status).toBe("UNAVAILABLE");
+    expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, actions: { ...SOLVER_DEMO_SCENARIO.actions, ipRiverBetAllIn: true } }).status).toBe("UNAVAILABLE");
+    expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, actions: { ...SOLVER_DEMO_SCENARIO.actions, ipRiverRaisePercent: [] } }).status).toBe("UNAVAILABLE");
     expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, actions: { ...SOLVER_DEMO_SCENARIO.actions, ipRiverRaiseAllIn: true } }).status).toBe("UNAVAILABLE");
     expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, combo: "As5s" }).status).toBe("UNAVAILABLE");
+    expect(lookupSolverSpot({ ...SOLVER_DEMO_REQUEST, combo: undefined }).status).toBe("UNAVAILABLE");
   });
 
   it("marks unsupported game variants separately from compatible but uncovered spots", () => {
